@@ -1,0 +1,6 @@
+{
+  "name": "Mosquée SALEM — Programme Arabe A1 (13-17 ans)",
+  "description": "Portail pédagogique d'apprentissage progressif de la langue arabe (niveau A1 complet) et fiches PDF pour les adolescents de 13 à 17 ans — Mosquée SALEM de Saint-Sulpice.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
