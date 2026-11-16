@@ -9,9 +9,7 @@ import {
   Sparkles,
   Volume2,
   CheckCircle2,
-  RotateCcw,
-  Download,
-  FileText
+  RotateCcw
 } from 'lucide-react';
 import {
   WUDU_STEPS,
@@ -28,11 +26,6 @@ import {
   HIJRI_MONTHS,
   DAILY_DUAS
 } from '../data/prayerAndReligionData';
-import {
-  CompletePdfDocId,
-  downloadCompleteMultiPagePdf
-} from '../utils/pdfGenerator';
-
 type ReligionSubTab =
   | 'wudu-salat'
   | 'piliers-foi'
@@ -43,7 +36,6 @@ type ReligionSubTab =
 
 interface PrayerAndReligionViewProps {
   initialTab?: ReligionSubTab;
-  onOpenPdfDoc?: (docId: CompletePdfDocId) => void;
 }
 
 const RELIGION_QCM = [
@@ -134,8 +126,7 @@ const RELIGION_QCM = [
 ];
 
 export const PrayerAndReligionView: React.FC<PrayerAndReligionViewProps> = ({
-  initialTab = 'wudu-salat',
-  onOpenPdfDoc
+  initialTab = 'wudu-salat'
 }) => {
   const [activeTab, setActiveTab] = useState<ReligionSubTab>(initialTab);
   const [selectedSalatStep, setSelectedSalatStep] = useState<number>(1);
@@ -175,14 +166,10 @@ export const PrayerAndReligionView: React.FC<PrayerAndReligionViewProps> = ({
               <span>PROGRAMME COMPLET DE PRIÈRE & PRINCIPES DE L’ISLAM</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-display font-extrabold tracking-tight text-white">
-              Apprentissage de la Prière (Ṣalāt), Ablutions & Fondements Approfondis de l’Islam
+              Apprentissage de la Prière (Ṣalāt), Ablutions & Fondements de l’Islam
             </h1>
             <p className="text-xs sm:text-sm text-sky-100 leading-relaxed">
-              Chaque formule, invocation, verset et règle juridique est présenté avec le système{' '}
-              <strong className="text-white">3-en-1 obligatoire</strong> :{' '}
-              <span className="underline decoration-sky-300">Arabe vocalisé</span> +{' '}
-              <span className="underline decoration-sky-300">Transcription phonétique</span> +{' '}
-              <span className="underline decoration-sky-300">Signification en français</span>.
+              Guide complet pas-à-pas des ablutions, de la prière quotidienne et des piliers de la religion avec texte arabe vocalisé, phonétique et traduction française.
             </p>
           </div>
 
@@ -296,86 +283,6 @@ export const PrayerAndReligionView: React.FC<PrayerAndReligionViewProps> = ({
             <BookOpen className="w-4 h-4 text-sky-500" />
             <span>6. QCM Prière & Religion</span>
           </button>
-        </div>
-      </div>
-
-      {/* =====================================================================
-          BARRE DES 3 FICHIERS PDF OFFICIELS À TÉLÉCHARGER / IMPRIMER
-          (Fichier PDF Prière · Fichier PDF Résumé Islam · Fichier PDF Alphabet)
-      ===================================================================== */}
-      <div className="bg-white border border-sky-300 rounded-xl p-4 shadow-2xs space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sky-100 pb-2.5">
-          <div>
-            <span className="text-xs font-mono-tabular font-bold text-sky-700 uppercase">
-              SUPPORTS PDF IMPRIMABLES A4 · ÉCRITURE GRANDE & LISIBLE À L’IMPRESSION
-            </span>
-            <h2 className="text-sm sm:text-base font-display font-extrabold text-slate-950">
-              Fichiers PDF Officiels : Prière & Ablutions, Résumé de l’Islam et Alphabet Arabe
-            </h2>
-          </div>
-          <span className="text-xs text-slate-600">
-            Téléchargez directement le fichier <code>.pdf</code> ou ouvrez l’aperçu A4 complet
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {[
-            {
-              docId: 'pdf-priere-salat' as CompletePdfDocId,
-              code: 'PDF-10',
-              title: 'Fichier PDF Prière & Ablutions',
-              desc: 'Les 8 étapes des Ablutions (Wuḍū’), les 5 prières et les 11 étapes de la Ṣalāt (Tachahhud, Ibrāhīmiyyah) + QCM (2 pages A4).'
-            },
-            {
-              docId: 'pdf-resume-islam' as CompletePdfDocId,
-              code: 'PDF-11',
-              title: 'Fichier PDF Résumé de l’Islam',
-              desc: 'Les 5 Piliers de l’Islam, 6 Piliers de la Foi, Tawḥīd, 5 statuts du Fiqh, Maximes, Maqāṣid & Invocations + QCM (2 pages A4).'
-            },
-            {
-              docId: 'pdf-alphabet' as CompletePdfDocId,
-              code: 'PDF-01',
-              title: 'Fichier PDF Alphabet Arabe',
-              desc: 'Tableau complet des 28 lettres arabes, 4 positions, familles de squelettes, 6 lettres non-liantes, 16 mots soudés + QCM (2 pages A4).'
-            }
-          ].map((item) => (
-            <div
-              key={item.docId}
-              className="bg-sky-50/60 border border-sky-200 rounded-lg p-3.5 flex flex-col justify-between gap-3"
-            >
-              <div>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-mono-tabular font-extrabold text-sky-800 bg-white border border-sky-200 px-2 py-0.5 rounded">
-                    {item.code} · 2 PAGES A4
-                  </span>
-                  <FileText className="w-4 h-4 text-sky-600" />
-                </div>
-                <h3 className="text-sm font-extrabold text-slate-950 mt-1.5">{item.title}</h3>
-                <p className="text-xs text-slate-700 mt-1 leading-relaxed">{item.desc}</p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => downloadCompleteMultiPagePdf(item.docId)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white rounded-md transition-colors cursor-pointer"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  Télécharger .PDF
-                </button>
-                {onOpenPdfDoc && (
-                  <button
-                    type="button"
-                    onClick={() => onOpenPdfDoc(item.docId)}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold bg-white hover:bg-sky-100 text-sky-900 border border-sky-300 rounded-md transition-colors cursor-pointer"
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    Voir les 2 pages A4
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 

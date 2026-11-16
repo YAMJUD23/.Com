@@ -161,10 +161,10 @@ const A4SheetFrame: React.FC<A4SheetFrameProps> = ({
       {/* Compact A4 Page Footer */}
       <footer className="mt-2 pt-1.5 border-t border-slate-300 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-700 font-mono-tabular font-semibold">
         <span>
-          Support de Cours Arabe Niveau A2 (Format A4 Lisible) — Lecture, Grammaire, Vocabulaire & Exercices
+          Support de Cours — Langue Arabe & Sciences Islamiques
         </span>
         <span>
-          Système 3-en-1 : Arabe vocalisé + Phonétique + Français
+          Arabe vocalisé · Phonétique · Traduction française
         </span>
         <span className="font-bold text-sky-900">
           {code} · Page {pageNumber}/{totalPages}
@@ -895,12 +895,12 @@ export const DirectPdfPagesRenderer: React.FC<DirectPdfPagesRendererProps> = ({
       )}
 
       {/* Document Banner & Direct Actions Bar */}
-      <div className="no-print bg-sky-900 text-white rounded-lg p-3 sm:p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+      <div className="no-print bg-sky-900 text-white rounded-xl p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 border border-sky-800 shadow-2xs">
         <div>
           <div className="flex items-center gap-2 text-sky-300 text-xs font-mono-tabular">
             <FileText className="w-3.5 h-3.5" />
             <span>
-              DOCUMENT PDF COMPLET ({docMeta.pageCount} PAGES A4 HAUTE LISIBILITÉ) · CLIQUEZ SUR UN MOT POUR LE ZOOMER
+              SUPPORT DE COURS A4 ({docMeta.pageCount} PAGES) · LECTURE INTERACTIVE & IMPRESSION
             </span>
           </div>
           <h1 className="text-sm sm:text-base font-extrabold tracking-tight mt-0.5">
@@ -913,15 +913,15 @@ export const DirectPdfPagesRenderer: React.FC<DirectPdfPagesRendererProps> = ({
           <button
             type="button"
             onClick={handleDownload}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-sky-400 hover:bg-sky-300 text-slate-950 rounded-md transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold bg-sky-400 hover:bg-sky-300 text-slate-950 rounded-md transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            Télécharger ce PDF ({docMeta.pageCount} pages)
+            Télécharger le fichier .PDF ({docMeta.pageCount} p.)
           </button>
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold bg-sky-800 hover:bg-sky-700 text-white border border-sky-600 rounded-md transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-sky-800 hover:bg-sky-700 text-white border border-sky-600 rounded-md transition-colors cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             Imprimer ({docMeta.pageCount} p. A4)

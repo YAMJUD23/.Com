@@ -257,10 +257,10 @@ export const TasbihCounterView: React.FC = () => {
               </div>
               <div className="grid grid-cols-4 gap-2">
                 {[
-                  { idx: 0, label: '1. SubḥānAllāh', range: '33×', count: Math.min(33, cycleState.totalBeads) },
-                  { idx: 1, label: '2. Al-ḥamdu lillāh', range: '33×', count: Math.max(0, Math.min(33, cycleState.totalBeads - 33)) },
-                  { idx: 2, label: '3. Allāhu akbar', range: '33×', count: Math.max(0, Math.min(33, cycleState.totalBeads - 66)) },
-                  { idx: 3, label: '4. Lā ilāha illa Llāh', range: '1× (100e)', count: cycleState.totalBeads >= 100 ? 1 : 0 }
+                  { idx: 0, label: 'SubḥānAllāh', range: '33×', count: Math.min(33, cycleState.totalBeads) },
+                  { idx: 1, label: 'Al-ḥamdu lillāh', range: '33×', count: Math.max(0, Math.min(33, cycleState.totalBeads - 33)) },
+                  { idx: 2, label: 'Allāhu akbar', range: '33×', count: Math.max(0, Math.min(33, cycleState.totalBeads - 66)) },
+                  { idx: 3, label: 'Lā ilāha illa Llāh', range: '1× (100e)', count: cycleState.totalBeads >= 100 ? 1 : 0 }
                 ].map((stage) => {
                   const isCurrent = postPrayerStage.stageIndex === stage.idx && !postPrayerStage.isCycleComplete;
                   const isDone =
@@ -271,9 +271,9 @@ export const TasbihCounterView: React.FC = () => {
                       key={stage.idx}
                       className={`rounded-lg p-2 border text-center ${
                         isCurrent
-                          ? 'bg-sky-600 text-white border-sky-700 font-bold'
+                          ? 'bg-sky-700 text-white border-sky-800 font-bold'
                           : isDone
-                          ? 'bg-emerald-50 text-emerald-900 border-emerald-300 font-semibold'
+                          ? 'bg-sky-100 text-sky-950 border-sky-300 font-semibold'
                           : 'bg-sky-50/60 text-slate-600 border-sky-200'
                       }`}
                     >
@@ -377,8 +377,8 @@ export const TasbihCounterView: React.FC = () => {
             </button>
 
             {mode === 'cycle-100' && postPrayerStage.isCycleComplete && (
-              <div className="bg-emerald-50 border border-emerald-300 text-emerald-950 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <div className="bg-sky-50 border border-sky-300 text-sky-950 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-sky-700 shrink-0" />
                 <span>
                   Mā chā’a Llāh ! Cycle complet de 100 terminé (33 SubḥānAllāh + 33 Al-ḥamdu lillāh + 33 Allāhu akbar + 1 Tahlīl). Cliquez à nouveau pour démarrer un nouveau cycle.
                 </span>

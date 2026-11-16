@@ -88,13 +88,13 @@ export const MosqueeSalemLogo: React.FC<MosqueeSalemLogoProps> = ({
           <span className="font-display font-extrabold text-sm sm:text-base text-slate-950 tracking-tight whitespace-nowrap">
             Mosquée SALEM
           </span>
-          <span className="text-xs font-semibold text-sky-700 whitespace-nowrap">
-            · Saint-Sulpice-la-Pointe
+          <span className="text-xs font-medium text-sky-700 whitespace-nowrap">
+            Saint-Sulpice-la-Pointe
           </span>
         </div>
         {showSubtitle && (
-          <p className="text-[11px] text-slate-600 truncate">
-            Pôle Éducatif : Cours d’Arabe Niveau A2 (9 Livrets PDF) · Prière & Religion · Coran (25 Sourates) · Tasbih
+          <p className="text-xs text-slate-500 truncate">
+            Institut d’Enseignement Arabe &amp; Sciences Islamiques
           </p>
         )}
       </div>

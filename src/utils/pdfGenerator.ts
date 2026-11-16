@@ -103,102 +103,102 @@ export interface CompletePdfDocMeta {
 export const COMPLETE_PDF_DOCUMENTS: CompletePdfDocMeta[] = [
   {
     id: 'pdf-alphabet',
-    code: 'PDF-01',
-    title: 'PDF 1 : Alphabet & Lecture',
+    code: 'ALPHABET',
+    title: 'Alphabet Arabe & Formes d’Écriture',
     subtitle: 'Les 28 lettres, familles de squelettes, 4 positions, 16 mots soudés + QCM',
     pageCount: 2,
     summary:
-      'Tableau complet des 28 lettres arabes, familles de squelettes, 6 lettres non-liantes, 16 mots soudés et QCM (sans corrigé affiché).'
+      'Tableau complet des 28 lettres arabes, familles de squelettes, 6 lettres non-liantes, 16 mots soudés et QCM.'
   },
   {
     id: 'pdf-voyelles',
-    code: 'PDF-02',
-    title: 'PDF 2 : Voyelles & Syllabes',
-    subtitle: 'Voyelles courtes/longues, Règles 1-2-3, grille des 28 lettres, 28 verbes + QCM',
+    code: 'VOYELLES',
+    title: 'Voyelles, Syllabes & Lecture Fluide',
+    subtitle: 'Voyelles courtes/longues, Sukūn, Chadda, Tanwīn, grille des 28 lettres + QCM',
     pageCount: 2,
     summary:
-      'Règles 1-2-3 (Sukūn, Chadda, Tanwīn) et les 11 signes de vocalisation, grille des 28 lettres, 28 verbes, 16 paires et QCM.'
+      'Règles de vocalisation (Sukūn, Chadda, Tanwīn), les 11 signes de lecture, grille des 28 lettres, 28 verbes, 16 paires et QCM.'
   },
   {
     id: 'pdf-grammaire',
-    code: 'PDF-03',
-    title: 'PDF 3 : Grammaire & Phrases',
-    subtitle: 'Construire une phrase A2, « J’ai / Il y a », 14 Lunaires/Solaires, Pronoms, Dialogues + QCM',
+    code: 'GRAMMAIRE',
+    title: 'Grammaire, Pronoms & Construction de Phrases',
+    subtitle: 'Construire une phrase, « J’ai / Il y a », Lettres Lunaires & Solaires, Pronoms + QCM',
     pageCount: 2,
     summary:
-      'Méthode concrète pour construire ses phrases (sans verbe être, possession, 8 pronoms, conjugaison passé/présent, dialogues réels) et QCM.'
+      'Méthode concrète pour construire ses phrases (sans verbe être, possession, pronoms, conjugaison passé/présent, dialogues réels) et QCM.'
   },
   {
     id: 'pdf-vocab300',
-    code: 'PDF-04',
-    title: 'PDF 4 : Les 200 Mots par Thème',
-    subtitle: '200 mots indispensables classés en 9 sous-catégories (dont 22 mots Religion) + QCM',
+    code: 'VOCABULAIRE',
+    title: 'Lexique Essentiel : 200 Mots par Thème',
+    subtitle: '200 mots indispensables classés en sous-catégories thématiques + QCM',
     pageCount: 2,
     summary:
-      'Organisation claire par sous-catégories : Salutations, Mots-outils, Famille, Maison & Ville, Nourriture & Corps, Temps, Adjectifs, 24 Verbes et 22 mots Religion + QCM.'
+      'Organisation claire par thèmes : Salutations, Mots-outils, Famille, Maison & Ville, Nourriture & Corps, Temps, Adjectifs, Verbes et Religion + QCM.'
   },
   {
     id: 'pdf-sourates',
-    code: 'PDF-05',
-    title: 'PDF 5 : Les 10 Sourates',
-    subtitle: 'Al-Fātiḥa & 9 sourates essentielles (Arabe vocalisé · Phonétique · Traduction) + QCM',
+    code: 'SOURATES',
+    title: 'Livret des 10 Sourates Courtes Essentielles',
+    subtitle: 'Al-Fātiḥa & 9 sourates courtes (Arabe vocalisé · Phonétique · Traduction) + QCM',
     pageCount: 2,
     summary:
-      'Les 10 sourates essentielles sur 2 pages A4 : texte arabe vocalisé, transcription phonétique, traduction française, mots-clés et QCM.'
+      'Les 10 sourates essentielles sur 2 pages A4 en grands caractères : texte arabe vocalisé, transcription phonétique, traduction française et QCM.'
   },
   {
     id: 'pdf-cahier-quiz',
-    code: 'PDF-06',
-    title: 'PDF 6 : Exercices & Examen A2',
-    subtitle: '4 exercices concrets à compléter + Grand Examen QCM Bilan A2',
+    code: 'EXERCICES',
+    title: 'Cahier d’Exercices & Examen Bilan',
+    subtitle: 'Exercices pratiques à compléter + Grand QCM Bilan de fin de niveau',
     pageCount: 2,
     summary:
-      'Cahier d’exercices pratiques (écriture attachée, traduction de phrases, pronoms/verbes, questions du quotidien) et QCM final A2 sans corrigé.'
+      'Cahier d’exercices pratiques (écriture attachée, traduction de phrases, pronoms/verbes, questions du quotidien) et QCM final.'
   },
   {
     id: 'pdf-conjugaison-a2',
-    code: 'PDF-07',
-    title: 'PDF 7 : Conjugaison & Négations A2',
-    subtitle: '10 pronoms, Passé / Présent / Futur / Impératif, 8 verbes piliers & les 5 négations + QCM',
+    code: 'CONJUGAISON',
+    title: 'Conjugaison aux 4 Temps & Négations',
+    subtitle: '10 pronoms, Passé / Présent / Futur / Impératif, verbes piliers & négations + QCM',
     pageCount: 2,
     summary:
-      'Tableaux complets de conjugaison Niveau A2 aux 4 temps (Māḍī, Muḍāri‘, Mustaqbal, Amr), les 5 particules de négation (Lā, Mā, Lam, Lan, Laysa), phrases modèles et QCM.'
+      'Tableaux complets de conjugaison aux 4 temps (Māḍī, Muḍāri‘, Mustaqbal, Amr), particules de négation (Lā, Mā, Lam, Lan, Laysa), phrases modèles et QCM.'
   },
   {
     id: 'pdf-conversations-a2',
-    code: 'PDF-08',
-    title: 'PDF 8 : Connecteurs, Heure & Dialogues A2',
-    subtitle: '10 connecteurs logiques, dire l’heure, nombres (1-1000), dialogues médecin/marché + QCM',
+    code: 'EXPRESSION',
+    title: 'Connecteurs Logiques, Heure & Conversations',
+    subtitle: 'Connecteurs logiques, dire l’heure, nombres (1–1000), dialogues pratiques + QCM',
     pageCount: 2,
     summary:
-      'Outils d’expression Niveau A2 : mots de liaison (parce que, mais, avant de, après que, bien que), lire l’heure exacte, nombres et dialogues pratiques complets + QCM.'
+      'Outils d’expression : mots de liaison (parce que, mais, avant de, après que, bien que), lire l’heure exacte, nombres et dialogues pratiques complets + QCM.'
   },
   {
     id: 'pdf-textes-lecture-a2',
-    code: 'PDF-09',
-    title: 'PDF 9 : Textes Suivis, Racines & Proverbes A2',
-    subtitle: '3 textes suivis vocalisés, système des racines de 3 lettres (K-T-B, ‘-L-M...) & proverbes + QCM',
+    code: 'LECTURE',
+    title: 'Textes Suivis, Racines & Proverbes Arabes',
+    subtitle: 'Textes suivis vocalisés, système des racines de 3 lettres (K-T-B, ‘-L-M...) & proverbes + QCM',
     pageCount: 2,
     summary:
-      'Lecture fluide Niveau A2 : textes suivis entièrement vocalisés avec traduction ligne par ligne, secret des racines arabes de 3 lettres, 6 proverbes célèbres et QCM.'
+      'Lecture fluide : textes suivis entièrement vocalisés avec traduction ligne par ligne, secret des racines arabes de 3 lettres, proverbes célèbres et QCM.'
   },
   {
     id: 'pdf-priere-salat',
-    code: 'PDF-10',
-    title: 'PDF 10 : Guide Prière & Ablutions',
-    subtitle: 'Les 8 étapes des Ablutions (Wuḍū’), 5 Prières, les 11 étapes de la Ṣalāt (Tachahhud, Ibrāhīmiyyah) + QCM',
+    code: 'PRIÈRE',
+    title: 'Guide Complet des Ablutions & de la Prière',
+    subtitle: 'Les étapes des Ablutions (Wuḍū’), les 5 Prières, la Ṣalāt pas à pas (Tachahhud) + QCM',
     pageCount: 2,
     summary:
-      'Fichier PDF complet de la Prière et des Ablutions : les 8 étapes du Wuḍū’, annulatifs, tableau des 5 prières et les 11 étapes de la Ṣalāt avec formules en arabe vocalisé, phonétique, français et QCM.'
+      'Support complet de la Prière et des Ablutions : étapes du Wuḍū’, annulatifs, tableau des 5 prières et déroulement de la Ṣalāt avec formules en arabe vocalisé, phonétique, français et QCM.'
   },
   {
     id: 'pdf-resume-islam',
-    code: 'PDF-11',
-    title: 'PDF 11 : Résumé de l’Islam',
-    subtitle: '5 Piliers de l’Islam, 6 Piliers de la Foi, Tawḥīd, 5 Statuts du Fiqh, Maximes, Maqāṣid, Invocations + QCM',
+    code: 'FONDEMENTS',
+    title: 'Synthèse des Fondements de l’Islam & du Fiqh',
+    subtitle: 'Piliers de l’Islam et de la Foi, Tawḥīd, Statuts du Fiqh, Maximes, Maqāṣid & Invocations + QCM',
     pageCount: 2,
     summary:
-      'Fichier PDF complet Résumé de l’Islam : les 5 Piliers de l’Islam, les 6 Piliers de la Foi, les 3 dimensions du Tawḥīd, les 5 statuts du Fiqh, 5 maximes juridiques, 5 Maqāṣid, 12 mois hégiriens, invocations et QCM.'
+      'Synthèse de l’Islam : Piliers de l’Islam, Piliers de la Foi, dimensions du Tawḥīd, statuts du Fiqh, maximes juridiques, Maqāṣid, mois hégiriens, invocations et QCM.'
   }
 ];
 

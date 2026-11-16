@@ -158,3 +158,42 @@ test('COMPLETE_PDF_DOCUMENTS contains 11 complete 2-page PDFs (22 pages A4) incl
   assert.equal(PDF10_PRIERE_QUIZ.length, 6);
   assert.equal(PDF11_RESUME_ISLAM_QUIZ.length, 6);
 });
+
+import fs from 'node:fs';
+import path from 'node:path';
+import {
+  SHARED_ORIGINAL_PDF_DOCUMENTS,
+  ORIGINAL_A1_THREE_DIALOGUES,
+  TWENTY_FIVE_PROPHETS_QURAN,
+  QUESTIONNAIRE_ISLAM_9_QUESTIONS
+} from '../data/sharedOriginalPdfsData';
+
+test('SHARED_ORIGINAL_PDF_DOCUMENTS contains the 4 untouched student PDFs categorized into Arabe (1) and Religion (3)', () => {
+  assert.equal(SHARED_ORIGINAL_PDF_DOCUMENTS.length, 4);
+
+  const arabeDocs = SHARED_ORIGINAL_PDF_DOCUMENTS.filter((d) => d.domain === 'arabe');
+  const religionDocs = SHARED_ORIGINAL_PDF_DOCUMENTS.filter((d) => d.domain === 'religion');
+  assert.equal(arabeDocs.length, 1);
+  assert.equal(religionDocs.length, 3);
+
+  for (const doc of SHARED_ORIGINAL_PDF_DOCUMENTS) {
+    const filePath = path.join(process.cwd(), 'public', 'assets', 'aistudio', doc.assetFileName);
+    assert.ok(fs.existsSync(filePath), `Missing original PDF file at ${filePath}`);
+
+    for (let p = 1; p <= doc.pageCount; p++) {
+      const pageImgPath = path.join(
+        process.cwd(),
+        'public',
+        'assets',
+        'original-pdf-pages',
+        `${doc.pageImagePrefix}${p}.png`
+      );
+      assert.ok(fs.existsSync(pageImgPath), `Missing rendered page image at ${pageImgPath}`);
+    }
+  }
+
+  assert.equal(ORIGINAL_A1_THREE_DIALOGUES.length, 3);
+  assert.equal(TWENTY_FIVE_PROPHETS_QURAN.length, 25);
+  assert.equal(QUESTIONNAIRE_ISLAM_9_QUESTIONS.length, 9);
+});
+
