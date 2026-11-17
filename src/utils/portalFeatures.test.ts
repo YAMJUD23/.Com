@@ -197,3 +197,27 @@ test('SHARED_ORIGINAL_PDF_DOCUMENTS contains the 4 untouched student PDFs catego
   assert.equal(QUESTIONNAIRE_ISLAM_9_QUESTIONS.length, 9);
 });
 
+import { QURAN_LARGE_PDF_PACKS } from './pdfGenerator';
+
+test('QURAN_LARGE_PDF_PACKS covers all 25 Surahs across 10 dedicated large-print PDF booklets', () => {
+  assert.equal(QURAN_LARGE_PDF_PACKS.length, 10);
+
+  const allCoveredSurahs = QURAN_LARGE_PDF_PACKS.flatMap((p) => p.surahNumbers);
+  assert.equal(allCoveredSurahs.length, 25);
+  assert.equal(new Set(allCoveredSurahs).size, 25);
+
+  // Verify specific groupings requested by the user
+  const pack1 = QURAN_LARGE_PDF_PACKS.find((p) => p.id === 'coran-pdf-fatiha-falaq-nas')!;
+  assert.deepEqual(pack1.surahNumbers, [1, 113, 114]);
+
+  const pack2 = QURAN_LARGE_PDF_PACKS.find((p) => p.id === 'coran-pdf-kafirun-kawthar-nasr')!;
+  assert.deepEqual(pack2.surahNumbers, [109, 108, 110]);
+
+  const pack3 = QURAN_LARGE_PDF_PACKS.find((p) => p.id === 'coran-pdf-ikhlas-masad-maun')!;
+  assert.deepEqual(pack3.surahNumbers, [112, 111, 107]);
+
+  const packChams = QURAN_LARGE_PDF_PACKS.find((p) => p.id === 'coran-pdf-chams')!;
+  assert.deepEqual(packChams.surahNumbers, [91]);
+});
+
+

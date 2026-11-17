@@ -33,7 +33,10 @@ import {
 import {
   COMPLETE_PDF_DOCUMENTS,
   CompletePdfDocId,
+  QURAN_LARGE_PDF_PACKS,
+  QuranLargePdfPackId,
   downloadCompleteMultiPagePdf,
+  downloadQuranLargePdfPack,
   speakArabicText
 } from '../utils/pdfGenerator';
 import { Quran25ReaderView } from './Quran25ReaderView';
@@ -1227,6 +1230,55 @@ export const UnifiedReligionPortalView: React.FC<UnifiedReligionPortalViewProps>
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Télécharger le PDF ({doc.pageCount} pages)</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Les 10 Livrets PDF du Coran (25 Sourates en Très Grands Caractères) */}
+      <section className="bg-white border border-slate-200 rounded-xl p-5 shadow-2xs space-y-4">
+        <div className="border-b border-slate-200 pb-3">
+          <h2 className="text-lg font-display font-extrabold text-slate-950">
+            Les 10 Livrets PDF des 25 Sourates du Coran (Très Grands Caractères Ultra-Lisibles)
+          </h2>
+          <p className="text-xs text-slate-600">
+            Les 25 sourates réparties en 10 fichiers PDF distincts avec écriture très grande et aérée (arabe vocalisé géant, phonétique et traduction française).
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {QURAN_LARGE_PDF_PACKS.map((pack) => (
+            <div
+              key={pack.id}
+              className="border border-slate-200 bg-slate-50/40 hover:border-sky-300 rounded-xl p-4 flex flex-col justify-between gap-3 transition-colors"
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-mono-tabular font-extrabold text-sky-900 bg-sky-100 px-2.5 py-0.5 rounded">
+                    <FileText className="w-3.5 h-3.5" />
+                    CORAN TRÈS GRAND FORMAT · {pack.surahNumbers.length}{' '}
+                    {pack.surahNumbers.length > 1 ? 'SOURATES' : 'SOURATE COMPLÈTE'}
+                  </span>
+                  <span dir="rtl" className="font-arabic font-bold text-base text-sky-950">
+                    {pack.titleArabic}
+                  </span>
+                </div>
+                <h3 className="text-sm sm:text-base font-extrabold text-slate-950">
+                  {pack.title}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">{pack.subtitle}</p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200/80 flex items-center justify-end">
+                <button
+                  type="button"
+                  onClick={() => downloadQuranLargePdfPack(pack.id as QuranLargePdfPackId)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold bg-sky-800 hover:bg-sky-900 text-white shadow-2xs transition-colors cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Télécharger le PDF Grand Format</span>
                 </button>
               </div>
             </div>

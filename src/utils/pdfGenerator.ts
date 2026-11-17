@@ -57,6 +57,10 @@ import {
   PDF10_PRIERE_QUIZ,
   PDF11_RESUME_ISLAM_QUIZ
 } from '../data/prayerAndReligionData';
+import {
+  QURAN_25_SURAHS,
+  QuranSurah25Item
+} from '../data/quran25SurahsData';
 
 export function speakArabicText(arabicText: string): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -983,54 +987,17 @@ export function downloadCompleteMultiPagePdf(docId: CompletePdfDocId): void {
   // PDF 5 : LES 10 SOURATES COURTES ESSENTIELLES (2 PAGES A4 TRÈS GRAND FORMAT ULTRA-LISIBLE)
   // ==========================================================================
   else if (docId === 'pdf-sourates') {
-    const groups = [
-      ALL_12_SURAHS.slice(0, 5),
-      ALL_12_SURAHS.slice(5, 10)
-    ];
+    const essentialSurahNums = [1, 112, 113, 114, 108, 110, 103, 109, 107, 105];
+    const essentialSurahs = essentialSurahNums
+      .map((n) => QURAN_25_SURAHS.find((s) => s.number === n))
+      .filter((s): s is QuranSurah25Item => Boolean(s));
 
-    groups.forEach((surahGroup, idx) => {
-      const { canvas, ctx } = createA4Canvas(
-        'PDF-05',
-        `Les 10 Sourates Courtes Essentielles (TRÈS GRAND FORMAT LISIBLE) — Page ${idx + 1}/2`,
-        idx + 1,
-        2
-      );
-      let y = 64;
-      for (const s of surahGroup) {
-        ctx.fillStyle = '#0369A1';
-        ctx.fillRect(MARGIN_X, y, CONTENT_W, 33);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '800 18.5px "Outfit", sans-serif';
-        ctx.fillText(
-          `${s.titleFrench}  ·  [${s.titlePhonetic}]  ·  ${s.titleArabic}   —   Mots-clés : ${s.keyWords.map((k) => `${k.arabic} [${k.phonetic}] = ${k.french}`).join(' · ')}`,
-          MARGIN_X + 12,
-          y + 23,
-          CONTENT_W - 24
-        );
-        y += 37;
-
-        for (const v of s.verses) {
-          ctx.fillStyle = '#F8FAFC';
-          ctx.fillRect(MARGIN_X, y - 2, CONTENT_W, 48);
-          ctx.strokeStyle = '#CBD5E1';
-          ctx.strokeRect(MARGIN_X, y - 2, CONTENT_W, 48);
-
-          ctx.fillStyle = '#0F172A';
-          ctx.font = '700 26px "Noto Naskh Arabic", serif';
-          ctx.fillText(`(${v.verseNumber})   ${v.arabic}`, MARGIN_X + 12, y + 20, CONTENT_W - 24);
-          ctx.fillStyle = '#0369A1';
-          ctx.font = '700 17.5px "IBM Plex Mono", monospace';
-          ctx.fillText(`[${v.phonetic}]   —   ${v.french}`, MARGIN_X + 12, y + 41, CONTENT_W - 24);
-          y += 50;
-        }
-        y += 6;
-      }
-
-      if (idx === 1) {
-        drawQuizBlockOnCanvas(ctx, 'Compréhension & Vocabulaire des Sourates', SURAHS_QUIZ, Math.max(y + 4, 1420));
-      }
-      canvases.push(canvas);
-    });
+    const renderedPages = renderQuranSurahsLargePrintCanvases(
+      'CORAN — GRAND FORMAT',
+      'Sourates Courtes Essentielles (Très Grands Caractères)',
+      essentialSurahs
+    );
+    canvases.push(...renderedPages);
   }
 
   // ==========================================================================
@@ -2049,6 +2016,472 @@ export function downloadCompleteMultiPagePdf(docId: CompletePdfDocId): void {
   const a = document.createElement('a');
   a.href = url;
   a.download = `cours-arabe-a2-${docId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+// ============================================================================
+// LIVRETS PDF CORAN TRÈS GRANDS CARACTÈRES (25 SOURATES REGROUPÉES PAR LIVRETS)
+// ============================================================================
+
+export type QuranLargePdfPackId =
+  | 'coran-pdf-fatiha-falaq-nas'
+  | 'coran-pdf-kafirun-kawthar-nasr'
+  | 'coran-pdf-ikhlas-masad-maun'
+  | 'coran-pdf-fil-quraych-humazah-asr'
+  | 'coran-pdf-takathur-qariah-adiyat'
+  | 'coran-pdf-zalzalah-bayyinah-qadr'
+  | 'coran-pdf-alaq'
+  | 'coran-pdf-tin-charh-duha'
+  | 'coran-pdf-layl'
+  | 'coran-pdf-chams';
+
+export interface QuranLargePdfPackMeta {
+  id: QuranLargePdfPackId;
+  title: string;
+  titleArabic: string;
+  subtitle: string;
+  surahNumbers: number[];
+  pageEstimate: number;
+  fileName: string;
+}
+
+export const QURAN_LARGE_PDF_PACKS: QuranLargePdfPackMeta[] = [
+  {
+    id: 'coran-pdf-fatiha-falaq-nas',
+    title: 'Sourates Al-Fātiḥa, Al-Falaq & An-Nās',
+    titleArabic: 'الفاتحة · الفلق · الناس',
+    subtitle:
+      'L’Ouverture (7 v.) et les 2 sourates protectrices Al-Falaq (5 v.) & An-Nās (6 v.) — Très grands caractères',
+    surahNumbers: [1, 113, 114],
+    pageEstimate: 3,
+    fileName: 'Coran-Grand-Format-Al-Fatiha-Al-Falaq-An-Nas.pdf'
+  },
+  {
+    id: 'coran-pdf-kafirun-kawthar-nasr',
+    title: 'Sourates Al-Kāfirūn, Al-Kawthar & An-Naṣr',
+    titleArabic: 'الكافرون · الكوثر · النصر',
+    subtitle:
+      'Les Infidèles (6 v.), L’Abondance (3 v.) & Le Secours Victorieux (3 v.) — Très grands caractères',
+    surahNumbers: [109, 108, 110],
+    pageEstimate: 2,
+    fileName: 'Coran-Grand-Format-Al-Kafirun-Al-Kawthar-An-Nasr.pdf'
+  },
+  {
+    id: 'coran-pdf-ikhlas-masad-maun',
+    title: 'Sourates Al-Ikhlāṣ, Al-Masad & Al-Mā‘ūn',
+    titleArabic: 'الإخلاص · المسد · الماعون',
+    subtitle:
+      'Le Monothéisme Pur (4 v.), Les Fibres (5 v.) & L’Entraide (7 v.) — Très grands caractères',
+    surahNumbers: [112, 111, 107],
+    pageEstimate: 3,
+    fileName: 'Coran-Grand-Format-Al-Ikhlas-Al-Masad-Al-Maun.pdf'
+  },
+  {
+    id: 'coran-pdf-fil-quraych-humazah-asr',
+    title: 'Sourates Al-Fīl, Quraych, Al-Humazah & Al-‘Aṣr',
+    titleArabic: 'الفيل · قريش · الهمزة · العصر',
+    subtitle:
+      'L’Éléphant (5 v.), Les Quraych (4 v.), Les Médisants (9 v.) & Le Temps (3 v.) — Très grands caractères',
+    surahNumbers: [105, 106, 104, 103],
+    pageEstimate: 3,
+    fileName: 'Coran-Grand-Format-Al-Fil-Quraych-Al-Humazah-Al-Asr.pdf'
+  },
+  {
+    id: 'coran-pdf-takathur-qariah-adiyat',
+    title: 'Sourates At-Takāthur, Al-Qāri‘ah & Al-‘Ādiyāt',
+    titleArabic: 'التكاثر · القارعة · العاديات',
+    subtitle:
+      'La Course aux Richesses (8 v.), Le Fracas (11 v.) & Les Coursiers (11 v.) — Très grands caractères',
+    surahNumbers: [102, 101, 100],
+    pageEstimate: 4,
+    fileName: 'Coran-Grand-Format-At-Takathur-Al-Qariah-Al-Adiyat.pdf'
+  },
+  {
+    id: 'coran-pdf-zalzalah-bayyinah-qadr',
+    title: 'Sourates Az-Zalzalah, Al-Bayyinah & Al-Qadr',
+    titleArabic: 'الزلزلة · البينة · القدر',
+    subtitle:
+      'Le Tremblement de Terre (8 v.), La Preuve Évidente (8 v.) & La Nuit du Destin (5 v.) — Très grands caractères',
+    surahNumbers: [99, 98, 97],
+    pageEstimate: 4,
+    fileName: 'Coran-Grand-Format-Az-Zalzalah-Al-Bayyinah-Al-Qadr.pdf'
+  },
+  {
+    id: 'coran-pdf-alaq',
+    title: 'Sourate Al-‘Alaq (Iqra’ — L’Adhérence)',
+    titleArabic: 'سورة العلق',
+    subtitle:
+      'Sourate complète de 19 versets (Première révélation : « Lis, au nom de ton Seigneur ») — Très grands caractères',
+    surahNumbers: [96],
+    pageEstimate: 3,
+    fileName: 'Coran-Grand-Format-Sourate-Al-Alaq.pdf'
+  },
+  {
+    id: 'coran-pdf-tin-charh-duha',
+    title: 'Sourates At-Tīn, Ach-Charḥ & Aḍ-Ḍuḥā',
+    titleArabic: 'التين · الشرح · الضحى',
+    subtitle:
+      'Le Figuier (8 v.), L’Ouverture de la Poitrine (8 v.) & La Clarté du Matin (11 v.) — Très grands caractères',
+    surahNumbers: [95, 94, 93],
+    pageEstimate: 4,
+    fileName: 'Coran-Grand-Format-At-Tin-Ach-Charh-Ad-Duha.pdf'
+  },
+  {
+    id: 'coran-pdf-layl',
+    title: 'Sourate Al-Layl (La Nuit)',
+    titleArabic: 'سورة الليل',
+    subtitle:
+      'Sourate complète de 21 versets seule dans un livret dédié — Très grands caractères ultra-lisibles',
+    surahNumbers: [92],
+    pageEstimate: 3,
+    fileName: 'Coran-Grand-Format-Sourate-Al-Layl.pdf'
+  },
+  {
+    id: 'coran-pdf-chams',
+    title: 'Sourate Ach-Chams (Le Soleil)',
+    titleArabic: 'سورة الشمس',
+    subtitle:
+      'Sourate complète de 15 versets seule dans un livret dédié — Très grands caractères ultra-lisibles',
+    surahNumbers: [91],
+    pageEstimate: 2,
+    fileName: 'Coran-Grand-Format-Sourate-Ach-Chams.pdf'
+  }
+];
+
+function getWrappedCanvasLines(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number
+): string[] {
+  const words = text.trim().split(/\s+/);
+  if (words.length === 0) return [''];
+  const lines: string[] = [];
+  let currentLine = words[0];
+
+  for (let i = 1; i < words.length; i++) {
+    const candidate = `${currentLine} ${words[i]}`;
+    if (ctx.measureText(candidate).width <= maxWidth) {
+      currentLine = candidate;
+    } else {
+      lines.push(currentLine);
+      currentLine = words[i];
+    }
+  }
+  lines.push(currentLine);
+  return lines;
+}
+
+function renderQuranSurahsLargePrintCanvases(
+  docCode: string,
+  docTitle: string,
+  surahs: QuranSurah25Item[]
+): HTMLCanvasElement[] {
+  const pages: { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D }[] = [];
+
+  const startNewPage = (): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } => {
+    const canvas = document.createElement('canvas');
+    canvas.width = PAGE_W;
+    canvas.height = PAGE_H;
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(SCALE, SCALE);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, BASE_W, BASE_H);
+
+    pages.push({ canvas, ctx });
+    return { canvas, ctx };
+  };
+
+  let currentPage = startNewPage();
+  let y = 70;
+  const maxPageY = BASE_H - 42;
+
+  for (let sIdx = 0; sIdx < surahs.length; sIdx++) {
+    const surah = surahs[sIdx];
+    const needsBasmala = surah.number !== 1;
+    const headerBlockHeight = 76 + (needsBasmala ? 92 : 0) + 180;
+
+    // Start new surah on a fresh page if remaining space is too tight
+    if (y > 90 && y + headerBlockHeight > maxPageY) {
+      currentPage = startNewPage();
+      y = 70;
+    }
+
+    // Draw Surah Header Banner (Large & Clear)
+    const { ctx } = currentPage;
+    ctx.fillStyle = '#075985';
+    ctx.fillRect(MARGIN_X, y, CONTENT_W, 68);
+    ctx.strokeStyle = '#0369A1';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(MARGIN_X, y, CONTENT_W, 68);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '800 26px "Outfit", sans-serif';
+    ctx.fillText(
+      `Sourate ${surah.namePhonetic} — ${surah.nameFrench}`,
+      MARGIN_X + 18,
+      y + 32,
+      CONTENT_W - 340
+    );
+
+    ctx.fillStyle = '#BAE6FD';
+    ctx.font = '700 18px "IBM Plex Mono", monospace';
+    ctx.fillText(
+      `Sourate N°${surah.number} · ${surah.revelationType} · ${surah.versesCount} versets (Arabe vocalisé · Phonétique · Traduction)`,
+      MARGIN_X + 18,
+      y + 56,
+      CONTENT_W - 340
+    );
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 38px "Noto Naskh Arabic", "Amiri", serif';
+    ctx.fillText(surah.nameArabic, MARGIN_X + CONTENT_W - 18, y + 47);
+    ctx.textAlign = 'left';
+
+    y += 76;
+
+    // Draw Basmala Banner (except for Al-Fatiha where Basmala is verse 1)
+    if (needsBasmala) {
+      currentPage.ctx.fillStyle = '#F0F9FF';
+      currentPage.ctx.fillRect(MARGIN_X, y, CONTENT_W, 84);
+      currentPage.ctx.strokeStyle = '#0284C7';
+      currentPage.ctx.lineWidth = 1.5;
+      currentPage.ctx.strokeRect(MARGIN_X, y, CONTENT_W, 84);
+
+      currentPage.ctx.textAlign = 'center';
+      currentPage.ctx.fillStyle = '#0F172A';
+      currentPage.ctx.font = '700 38px "Noto Naskh Arabic", "Amiri", serif';
+      currentPage.ctx.fillText(
+        'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+        MARGIN_X + CONTENT_W / 2,
+        y + 42
+      );
+
+      currentPage.ctx.fillStyle = '#0369A1';
+      currentPage.ctx.font = '700 19.5px "IBM Plex Mono", monospace';
+      currentPage.ctx.fillText(
+        '[Bismi Llāhi r-Raḥmāni r-Raḥīm] — Au nom d’Allah, le Tout-Miséricordieux, le Très-Miséricordieux',
+        MARGIN_X + CONTENT_W / 2,
+        y + 72,
+        CONTENT_W - 32
+      );
+      currentPage.ctx.textAlign = 'left';
+      y += 94;
+    }
+
+    // Draw Each Verse in EXTRA-LARGE PRINT
+    for (let vIdx = 0; vIdx < surah.verses.length; vIdx++) {
+      const verse = surah.verses[vIdx];
+      const measureCtx = currentPage.ctx;
+
+      // Measure wrapped Arabic lines at giant 42px
+      measureCtx.font = '700 42px "Noto Naskh Arabic", "Amiri", serif';
+      const arabicFullText = `${verse.arabic} ﴿${verse.number}﴾`;
+      const arabicLines = getWrappedCanvasLines(
+        measureCtx,
+        arabicFullText,
+        CONTENT_W - 150
+      );
+
+      // Measure wrapped Phonetic lines at large 24px
+      measureCtx.font = '700 24px "IBM Plex Mono", monospace';
+      const phoneticFullText = `[${verse.phonetic}]`;
+      const phoneticLines = getWrappedCanvasLines(
+        measureCtx,
+        phoneticFullText,
+        CONTENT_W - 36
+      );
+
+      // Measure wrapped French lines at large 23px
+      measureCtx.font = '700 23px "Plus Jakarta Sans", sans-serif';
+      const frenchLines = getWrappedCanvasLines(
+        measureCtx,
+        verse.french,
+        CONTENT_W - 36
+      );
+
+      const arabicLineH = 58;
+      const phoneticLineH = 34;
+      const frenchLineH = 32;
+
+      const boxHeight =
+        18 +
+        arabicLines.length * arabicLineH +
+        10 +
+        phoneticLines.length * phoneticLineH +
+        8 +
+        frenchLines.length * frenchLineH +
+        16;
+
+      if (y + boxHeight > maxPageY) {
+        currentPage = startNewPage();
+        y = 70;
+
+        // Continuation strip at top of new page
+        currentPage.ctx.fillStyle = '#E0F2FE';
+        currentPage.ctx.fillRect(MARGIN_X, y, CONTENT_W, 42);
+        currentPage.ctx.strokeStyle = '#0284C7';
+        currentPage.ctx.lineWidth = 1.5;
+        currentPage.ctx.strokeRect(MARGIN_X, y, CONTENT_W, 42);
+        currentPage.ctx.fillStyle = '#075985';
+        currentPage.ctx.font = '800 20px "Outfit", sans-serif';
+        currentPage.ctx.fillText(
+          `Suite de la Sourate ${surah.namePhonetic} (${surah.nameFrench}) — ${surah.nameArabic}`,
+          MARGIN_X + 14,
+          y + 28
+        );
+        y += 52;
+      }
+
+      const pCtx = currentPage.ctx;
+      pCtx.fillStyle = vIdx % 2 === 0 ? '#FFFFFF' : '#F8FAFC';
+      pCtx.fillRect(MARGIN_X, y, CONTENT_W, boxHeight);
+      pCtx.strokeStyle = '#0284C7';
+      pCtx.lineWidth = 1.6;
+      pCtx.strokeRect(MARGIN_X, y, CONTENT_W, boxHeight);
+
+      // Left Verse Number Badge
+      pCtx.fillStyle = '#0369A1';
+      pCtx.fillRect(MARGIN_X + 14, y + 16, 108, 42);
+      pCtx.fillStyle = '#FFFFFF';
+      pCtx.font = '800 20px "IBM Plex Mono", monospace';
+      pCtx.fillText(`Verset ${verse.number}`, MARGIN_X + 24, y + 44);
+
+      // Giant Right-Aligned Arabic Lines
+      pCtx.textAlign = 'right';
+      pCtx.fillStyle = '#0F172A';
+      pCtx.font = '700 42px "Noto Naskh Arabic", "Amiri", serif';
+      let curY = y + 50;
+      for (const aLine of arabicLines) {
+        pCtx.fillText(aLine, MARGIN_X + CONTENT_W - 18, curY);
+        curY += arabicLineH;
+      }
+      pCtx.textAlign = 'left';
+
+      // Divider line between Arabic and Phonetic/French
+      const dividerY = y + 16 + arabicLines.length * arabicLineH + 4;
+      pCtx.strokeStyle = '#E2E8F0';
+      pCtx.lineWidth = 1;
+      pCtx.beginPath();
+      pCtx.moveTo(MARGIN_X + 14, dividerY);
+      pCtx.lineTo(MARGIN_X + CONTENT_W - 14, dividerY);
+      pCtx.stroke();
+
+      // Large Phonetic Lines
+      pCtx.fillStyle = '#0369A1';
+      pCtx.font = '700 24px "IBM Plex Mono", monospace';
+      let phonY = dividerY + 28;
+      for (const pLine of phoneticLines) {
+        pCtx.fillText(pLine, MARGIN_X + 18, phonY);
+        phonY += phoneticLineH;
+      }
+
+      // Large French Translation Lines
+      pCtx.fillStyle = '#1E293B';
+      pCtx.font = '700 23px "Plus Jakarta Sans", sans-serif';
+      let frY = phonY + 4;
+      for (const fLine of frenchLines) {
+        pCtx.fillText(fLine, MARGIN_X + 18, frY);
+        frY += frenchLineH;
+      }
+
+      y += boxHeight + 12;
+    }
+
+    y += 14;
+  }
+
+  // Stamp top header and footer with accurate total page count on every page
+  const totalPages = pages.length;
+  pages.forEach((p, idx) => {
+    const pageNum = idx + 1;
+    const { ctx } = p;
+
+    ctx.fillStyle = '#0284C7';
+    ctx.fillRect(0, 0, BASE_W, 56);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '800 21px "Outfit", sans-serif';
+    ctx.fillText(`${docCode} — ${docTitle}`, MARGIN_X, 36, BASE_W - 190);
+
+    ctx.fillStyle = '#0369A1';
+    ctx.fillRect(BASE_W - 164, 10, 148, 36);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 18px "IBM Plex Mono", monospace';
+    ctx.fillText(`PAGE ${pageNum} / ${totalPages}`, BASE_W - 148, 34);
+
+    ctx.fillStyle = '#334155';
+    ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(
+      `Coran en Très Grands Caractères — Texte Arabe Vocalisé · Phonétique · Traduction Française — Page ${pageNum}/${totalPages}`,
+      MARGIN_X,
+      BASE_H - 10,
+      CONTENT_W
+    );
+  });
+
+  return pages.map((p) => p.canvas);
+}
+
+export function downloadQuranLargePdfPack(packId: QuranLargePdfPackId): void {
+  const pack =
+    QURAN_LARGE_PDF_PACKS.find((p) => p.id === packId) || QURAN_LARGE_PDF_PACKS[0];
+  const surahs = pack.surahNumbers
+    .map((num) => QURAN_25_SURAHS.find((s) => s.number === num))
+    .filter((s): s is QuranSurah25Item => Boolean(s));
+
+  const canvases = renderQuranSurahsLargePrintCanvases(
+    'CORAN GRAND FORMAT',
+    pack.title,
+    surahs
+  );
+
+  const pagesJpegBytes = canvases.map((c) => {
+    const dataUrl = c.toDataURL('image/jpeg', 0.95);
+    const b64 = dataUrl.split(',')[1];
+    return Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0));
+  });
+
+  const pdfBytes = buildMultiPageJpegPdf(pagesJpegBytes, PAGE_W, PAGE_H);
+  const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = pack.fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+export function downloadSingleSurahLargePdf(surahNumber: number): void {
+  const surah =
+    QURAN_25_SURAHS.find((s) => s.number === surahNumber) || QURAN_25_SURAHS[0];
+
+  const canvases = renderQuranSurahsLargePrintCanvases(
+    `SOURATE N°${surah.number}`,
+    `Sourate ${surah.namePhonetic} (${surah.nameFrench}) — Très Grands Caractères`,
+    [surah]
+  );
+
+  const pagesJpegBytes = canvases.map((c) => {
+    const dataUrl = c.toDataURL('image/jpeg', 0.95);
+    const b64 = dataUrl.split(',')[1];
+    return Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0));
+  });
+
+  const pdfBytes = buildMultiPageJpegPdf(pagesJpegBytes, PAGE_W, PAGE_H);
+  const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Coran-Grand-Format-Sourate-${surah.number}-${surah.namePhonetic}.pdf`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
